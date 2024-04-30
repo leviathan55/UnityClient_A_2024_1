@@ -96,4 +96,9 @@ public class GameSystem : MonoBehaviour
     {
         
     }
+
+    public void ResetstoryModels()
+    {
+        
+    }
 }
