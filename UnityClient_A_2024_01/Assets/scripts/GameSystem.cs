@@ -57,6 +57,46 @@ public class GameSystem : MonoBehaviour
         StartCoroutine(ShowText());
     }
 
+    public void ApplyChoice(StoryModel.Result result)
+    {
+        switch(result.resultYype)
+        {
+            case storyModels.Result.ResultType.ChangeHp:
+                //UnityStats.currentHpPoint += result.value;
+                ChangeState(result);
+                break;
+
+            case storyModels.Result.ResultType.AddExperience:
+                ChangeState(result);
+                break;
+
+            case storyModels.Result.ResultType.GoToNextStory:
+                currentStoryIndex = result.value;
+                break;
+        }
+    }
+
+    public void StoryShow(int number)
+
+    {
+        storyModel tempStoryModel = FindStoryModel(number);
+
+    }
+
+    public void ChangeState(StoryModel.Result result)
+    {
+        if (result.stats.hpPoint > 0) UnityStats.hpPoint += result.stats.hpPoint;
+        if (result.stats.spPoint > 0) UnityStats.hpPoint += result.stats.hpPoint;
+        if (result.stats.currentHpPoint > 0) UnityStats.hpPoint += result.stats.hpPoint;
+        if (result.stats.currentSpPoint > 0) UnityStats.hpPoint += result.stats.hpPoint;
+        if (result.stats.currentXpPoint > 0) UnityStats.hpPoint += result.stats.hpPoint;
+        if (result.stats.strength > 0) UnityStats.hpPoint += result.stats.hpPoint;
+        if (result.stats.dexterity > 0) UnityStats.hpPoint += result.stats.hpPoint;
+        if (result.stats.consitiution > 0) UnityStats.hpPoint += result.stats.hpPoint;
+        if (result.stats.wisdom > 0) UnityStats.hpPoint += result.stats.hpPoint;
+        if (result.stats.intelligence > 0) UnityStats.hpPoint += result.stats.hpPoint;
+        if (result.stats.charisma > 0) UnityStats.hpPoint += result.stats.hpPoint;
+    }
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q)) Storyshow(1);
@@ -91,6 +131,50 @@ public class GameSystem : MonoBehaviour
         storyModels = Resources.LoadAII<StoryTableObject>("");
     }
 
+    StoryModel RandomStroy()
+    {
+        storyModels tempStoryModels = null;
+        List<StoryModel> StoryModelList = new List<StoryModel>();
+
+        for (int i = 0; i < storyModels.Length; i++)
+        {
+            if (storyModels[i].storytype == StoryModelList.SSTORYTYPE.MAIN)
+            {
+                StoryModelList.Add(storyModels[i]);
+            }
+        }
+
+
+        tempStoryModels = StoryModelList[Random.Range(0, StoryModelList.Count)];
+        currentStoryIndex = tempStoryModels.storyNumber;
+        Debug.Log("currentStoryIndex" + currentStoryIndex);
+
+        return tempStoryModels;
+    }
+
+    STORYGAMEModel FindStoryModel(int number)
+    {
+        StoryModel tempStoryModels = null;
+
+        for (int i = 0; i < storyModels.Length; i++)
+        {
+            if (storyModels[i].storyNumber == number)
+            {
+                tempStoryModels = storyModls[i];
+                break;
+            }
+        }
+
+    }
+
+#if UNITY_EDITOR
+    [ContextMenu("Reset Story Models")]
+
+    public void ResetStoryModels()
+    {
+        storyModels = Resources.LoadAll<StoryModel>("");
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -99,6 +183,7 @@ public class GameSystem : MonoBehaviour
 
     public void ResetstoryModels()
     {
-        
+
     }
+#endif
 }
